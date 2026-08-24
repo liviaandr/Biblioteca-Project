@@ -1,4 +1,5 @@
 package br.com.biblioteca.models;
 
-public class Livro {
+public record Livro(String nome, String isbn, int anoPublicacao, String editora,
+                    String genero) {
 }

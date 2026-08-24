@@ -1,4 +1,6 @@
 package br.com.biblioteca.models;
 
-public class Autor {
+import java.time.LocalDate;
+
+public record Autor(String nome, LocalDate dataNascimento, String email){
 }
