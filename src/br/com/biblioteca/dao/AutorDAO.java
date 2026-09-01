@@ -77,7 +77,7 @@ public class AutorDAO implements IPersistencia<Autor>{
     }
 
     @Override
-    public void alterar(String id, Autor objeto) {
+    public void alterar(String id, Autor autor) {
         
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
