@@ -76,7 +76,7 @@ public class LivroDAO implements IPersistencia<Livro> {
     }
 
     @Override
-    public void alterar(String id, Livro objeto) {
+    public void alterar(String id, Livro livro) {
        Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
 
