@@ -17,25 +17,19 @@ public class AutorDAO implements IPersistencia<Autor> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "INSERT INTO AUTOR (nome, data_nascimento) VALUES (?, ?)"
-            );
+            stmt = con.prepareStatement("INSERT INTO AUTOR (nome, data_nascimento) VALUES (?, ?)");
 
             stmt.setString(1, objeto.getNome());
             stmt.setDate(2, Date.valueOf(objeto.getDataNascimento()));
 
             stmt.executeUpdate();
 
-            System.out.println(
-                    "Autor " + objeto.getNome() + " inserido com sucesso."
-            );
+            System.out.println("Autor " + objeto.getNome() + " inserido com sucesso.");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
 
-            throw new RuntimeException(
-                    "Erro ao tentar inserir informação no banco de dados."
-            );
+            throw new RuntimeException("Erro ao tentar inserir informação no banco de dados.");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);
@@ -49,10 +43,8 @@ public class AutorDAO implements IPersistencia<Autor> {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "SELECT id, nome, data_nascimento " +
-                            "FROM AUTOR WHERE id = ?"
-            );
+            stmt = con.prepareStatement("SELECT id, nome, data_nascimento " +
+                            "FROM AUTOR WHERE id = ?");
 
             stmt.setString(1, id);
 
@@ -63,9 +55,7 @@ public class AutorDAO implements IPersistencia<Autor> {
 
                 autor.setId(rs.getInt("id"));
                 autor.setNome(rs.getString("nome"));
-                autor.setDataNascimento(
-                        rs.getDate("data_nascimento").toLocalDate()
-                );
+                autor.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
 
                 return autor;
             }
@@ -86,11 +76,9 @@ public class AutorDAO implements IPersistencia<Autor> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "UPDATE AUTOR " +
+            stmt = con.prepareStatement("UPDATE AUTOR " +
                             "SET nome = ?, data_nascimento = ? " +
-                            "WHERE id = ?"
-            );
+                            "WHERE id = ?");
 
             stmt.setString(1, objeto.getNome());
             stmt.setDate(2, Date.valueOf(objeto.getDataNascimento()));
@@ -101,9 +89,7 @@ public class AutorDAO implements IPersistencia<Autor> {
         } catch (SQLException ex) {
             ex.printStackTrace();
 
-            throw new RuntimeException(
-                    "Erro ao alterar informação no banco de dados"
-            );
+            throw new RuntimeException("Erro ao alterar informação no banco de dados");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);
@@ -116,23 +102,17 @@ public class AutorDAO implements IPersistencia<Autor> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "DELETE FROM AUTOR WHERE id = ?"
-            );
+            stmt = con.prepareStatement("DELETE FROM AUTOR WHERE id = ?");
 
             stmt.setString(1, id);
             stmt.executeUpdate();
 
-            System.out.println(
-                    "Autor " + id + " excluído com sucesso"
-            );
+            System.out.println("Autor " + id + " excluído com sucesso");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
 
-            throw new RuntimeException(
-                    "Erro ao excluir informação no banco de dados"
-            );
+            throw new RuntimeException("Erro ao excluir informação no banco de dados");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);

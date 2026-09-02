@@ -17,11 +17,8 @@ public class LivroDAO implements IPersistencia<Livro> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "INSERT INTO LIVRO " +
-                            "(nome, autor_id, isbn, ano_publicacao, editora, genero) " +
-                            "VALUES (?, ?, ?, ?, ?, ?)"
-            );
+            stmt = con.prepareStatement("INSERT INTO LIVRO (nome, autor_id, isbn, ano_publicacao, editora, genero) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)");
 
             stmt.setString(1, objeto.getNome());
             stmt.setInt(2, objeto.getAutor().getId());
@@ -32,15 +29,11 @@ public class LivroDAO implements IPersistencia<Livro> {
 
             stmt.executeUpdate();
 
-            System.out.println(
-                    "Livro " + objeto.getNome() + " inserido com sucesso."
-            );
+            System.out.println("Livro " + objeto.getNome() + " inserido com sucesso.");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException(
-                    "Erro ao tentar inserir informação no banco de dados."
-            );
+            throw new RuntimeException("Erro ao tentar inserir informação no banco de dados.");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);
@@ -54,10 +47,8 @@ public class LivroDAO implements IPersistencia<Livro> {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "SELECT livro_id, nome, autor_id, isbn, ano_publicacao, editora, genero " +
-                            "FROM LIVRO WHERE livro_id = ?"
-            );
+            stmt = con.prepareStatement("SELECT livro_id, nome, autor_id, isbn, ano_publicacao, editora, genero " +
+                            "FROM LIVRO WHERE livro_id = ?");
 
             stmt.setString(1, id);
 
@@ -104,11 +95,8 @@ public class LivroDAO implements IPersistencia<Livro> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "UPDATE LIVRO SET nome = ?, autor_id = ?, isbn = ?, " +
-                            "ano_publicacao = ?, editora = ?, genero = ? " +
-                            "WHERE livro_id = ?"
-            );
+            stmt = con.prepareStatement("UPDATE LIVRO SET nome = ?, autor_id = ?, isbn = ?, " +
+                            "ano_publicacao = ?, editora = ?, genero = ? WHERE livro_id = ?");
 
             stmt.setString(1, objeto.getNome());
             stmt.setInt(2, objeto.getAutor().getId());
@@ -123,9 +111,7 @@ public class LivroDAO implements IPersistencia<Livro> {
         } catch (SQLException ex) {
             ex.printStackTrace();
 
-            throw new RuntimeException(
-                    "Erro ao alterar informação no banco de dados"
-            );
+            throw new RuntimeException("Erro ao alterar informação no banco de dados");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);
@@ -138,23 +124,17 @@ public class LivroDAO implements IPersistencia<Livro> {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement(
-                    "DELETE FROM LIVRO WHERE livro_id = ?"
-            );
+            stmt = con.prepareStatement("DELETE FROM LIVRO WHERE livro_id = ?");
 
             stmt.setString(1, id);
             stmt.executeUpdate();
 
-            System.out.println(
-                    "Livro " + id + " excluído com sucesso"
-            );
+            System.out.println("Livro " + id + " excluído com sucesso");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
 
-            throw new RuntimeException(
-                    "Erro ao excluir informação no banco de dados"
-            );
+            throw new RuntimeException("Erro ao excluir informação no banco de dados");
 
         } finally {
             DatabaseConnection.closeConnection(con, stmt);
