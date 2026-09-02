@@ -1,26 +1,34 @@
 package br.com.biblioteca.database;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseConnection {
-    private static final String DRIVE_POSTGRES = "org.postgresql.Driver";
-    private static final String ENDERECO = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USUARIO = "postgres";
-    private static final String SENHA = "132574";
+    private static final String ARQUIVO_CONFIG = "database.properties";
 
     public static Connection getDatabaseConnection() {
+        Properties propriedades = new Properties();
 
-        try {
-            Class.forName(DRIVE_POSTGRES);
+        try (FileInputStream arquivo = new FileInputStream(ARQUIVO_CONFIG)) {
+            propriedades.load(arquivo);
+
+            String driver = propriedades.getProperty("driver");
+            String endereco = propriedades.getProperty("endereco");
+            String usuario = propriedades.getProperty("usuario");
+            String senha = propriedades.getProperty("senha");
+
+            Class.forName(driver);
             Connection conn
-                    = DriverManager.getConnection(ENDERECO, USUARIO, SENHA);
+                    = DriverManager.getConnection(endereco, usuario, senha);
             return conn;
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (IOException | ClassNotFoundException | SQLException ex) {
 
             ex.printStackTrace();
 
