@@ -1,10 +1,10 @@
 package br.com.biblioteca.dao;
 
-import br.com.biblioteca.models.Autor;
+import br.com.biblioteca.models.Editora;
 
-public class AutorDAO implements IPersistencia<Autor>{
+public class AutorDAO implements IPersistencia<Editora>{
     @Override
-    public void inserir(Autor autor) {
+    public void inserir(Editora editora) {
         
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
@@ -31,7 +31,7 @@ public class AutorDAO implements IPersistencia<Autor>{
     }
 
     @Override
-    public Autor consultar(String id) {
+    public Editora consultar(String id) {
         
     Connection con = Conexao.getConexao();   
     PreparedStatement stmt = null;
@@ -77,7 +77,7 @@ public class AutorDAO implements IPersistencia<Autor>{
     }
 
     @Override
-    public void alterar(String id, Autor autor) {
+    public void alterar(String id, Editora editora) {
         
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
