@@ -1,4 +1,4 @@
-package br.com.biblioteca.dao
+package br.com.biblioteca.dao;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
@@ -37,7 +37,7 @@ public class TelaConsulta extends JDialog {
                     JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
                  }
             });
-                 {pack(); 
+                 pack();
                 setLocationRelativeTo(parent);
     } 
 } 

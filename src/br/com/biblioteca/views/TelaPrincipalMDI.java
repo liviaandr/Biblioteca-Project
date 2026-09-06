@@ -1,4 +1,4 @@
-package biblioteca;
+package br.com.biblioteca.views;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,8 +9,8 @@ public class TelaPrincipalMDI extends JFrame implements ActionListener {
     private JDesktopPane desktopPane;
     private JMenuItem itemGerenciar;
 
-    public TelaPrincipalMDI(){
-        setTitle("Sistema de Biblioteca - MDI"):
+    public TelaPrincipalMDI() {
+        setTitle("Sistema de Biblioteca - MDI");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -18,27 +18,28 @@ public class TelaPrincipalMDI extends JFrame implements ActionListener {
         desktopPane = new JDesktopPane();
         add(desktopPane, BorderLayout.CENTER);
 
-        JMenuBar = new JMenuBar();
-        JMenuLivros = new JMenu("Livros");
-        JMenuItem itemGerenciar = new  JMenuItem("Gerenciar Livros");
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuLivros = new JMenu("Livros");
 
-        itemGerenciar.addActionListener (this);
+        itemGerenciar = new JMenuItem("Gerenciar Livros");
+
+        itemGerenciar.addActionListener(this);
 
         menuLivros.add(itemGerenciar);
         menuBar.add(menuLivros);
         setJMenuBar(menuBar);
-
     }
+
     @Override
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e) {
         if (e.getSource() == itemGerenciar) {
             TelaLivroMDI telaLivro = new TelaLivroMDI();
             desktopPane.add(telaLivro);
             telaLivro.setVisible(true);
-            }
         }
+    }
 
-public static void main (String[] args){
+    public static void main(String[] args) {
         TelaPrincipalMDI tela = new TelaPrincipalMDI();
         tela.setVisible(true);
     }

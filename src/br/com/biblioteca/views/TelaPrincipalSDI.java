@@ -1,4 +1,4 @@
-package biblioteca;
+package br.com.biblioteca.views;
 import javax.swing.*;
 import java.awt.*;
 

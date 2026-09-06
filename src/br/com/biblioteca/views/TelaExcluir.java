@@ -1,4 +1,4 @@
-package br.com.biblioteca.dao
+package br.com.biblioteca.dao;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import br.com.biblioteca.models.Livro
+import br.com.biblioteca.models.Livro;
 
 public class TelaExcluir extends JDialog {
     private JTextField txtId = new JTextField(5);
