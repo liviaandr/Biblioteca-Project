@@ -4,78 +4,100 @@ import br.com.biblioteca.dao.LivroDAO;
 import br.com.biblioteca.models.Livro;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class TelaLivroMDI extends JInternalFrame implements ActionListener {
-    private JTextField txtId = new JTextField(5);
-    private JTextField txtTitulo = new JTextField();
-    private JTextField txtAutor = new JTextField();
+public class TelaLivroMDI extends JInternalFrame {private JTextField txtId = new JTextField();
+    private JTextField txtNome = new JTextField();
+    private JTextField txtAutorId = new JTextField();
+    private JTextField txtIsbn = new JTextField();
+    private JTextField txtAno = new JTextField();
+    private JTextField txtEditora = new JTextField();
+    private JTextField txtGenero = new JTextField();
 
-    // 1. Declarado como btnBuscar
     private JButton btnBuscar = new JButton("Buscar");
     private JButton btnSalvar = new JButton("Salvar");
+    private JButton btnAtualizar = new JButton("Atualizar");
+    private JButton btnExcluir = new JButton("Excluir");
 
     private LivroDAO livroDAO = new LivroDAO();
 
-    public TelaLivroMDI(){
-        super("Gerenciamento de Livros - MDI", true, true, true, true);
+    public TelaLivroMDI() {
+        super("Cadastro de Livros - MDI", true, true, true, true);
         setSize(350, 250);
-        setLayout(new GridLayout(4, 2, 5, 5));
+        setLayout(new GridLayout(6, 2, 5, 5));
 
         add(new JLabel(" ID (Busca):"));
         add(txtId);
 
         add(new JLabel(" Título:"));
-        add(txtTitulo);
+        add(txtNome);
 
         add(new JLabel(" Autor:"));
-        add(txtAutor);
+        add(txtAutorId);
 
         add(btnSalvar);
-        add(btnBuscar); // Usando btnBuscar
+        add(btnBuscar);
+        add(btnAtualizar);
+        add(btnExcluir);
 
-        btnSalvar.addActionListener(this);
-        btnBuscar.addActionListener(this); // Usando btnBuscar
-    }
+        btnSalvar.addActionListener(e -> {
+            try {
+                Livro livro = new Livro();
+                livro.setNome(txtNome.getText());
+                livro.setAutor(txtAutorId.getText());
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnSalvar) {
-            salvar();
-        } else if (e.getSource() == btnBuscar){ // Usando btnBuscar
-            buscar(); // Nome do método ajustado para buscar()
-        }
-    }
+                livroDAO.inserir(livro);
+                JOptionPane.showMessageDialog(this, "Foi salvo com sucesso!");
+                limparCampos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar!");
+            }
+        });
 
-    private void salvar(){
-        try {
-            Livro a = new Livro();
-            a.setNome(txtTitulo.getText());
+        btnBuscar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                Livro livro = livroDAO.consultar(txtId.getText());
+                if (livro != null) {
+                    txtNome.setText(livro.getNome());
+                    txtAutorId.setText(livro.getAutor());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Não encontrado!");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao buscar!");
+            }
+        });
 
-            livroDAO.inserir(a);
-            JOptionPane.showMessageDialog(this, "O livro foi salvo com sucesso!");
-            limparCampos();
-        } catch (Exception ex) { // Corrigido erro de digitação Excepcion -> Exception
-            JOptionPane.showMessageDialog(this, "Erro ao salvar!");
-        }
-    }
+        btnAtualizar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                Livro livro = new Livro();
+                livro.setId(id);
+                livro.setNome(txtNome.getText());
+                livro.setAutor(txtAutorId.getText());
 
-    // Método para o botão Buscar
-    private void buscar() {
-        try {
-            int id = Integer.parseInt(txtId.getText());
-            // Lógica de busca no livroDAO entra aqui
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Informe um ID válido para busca!");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao buscar livro!");
-        }
+                livroDAO.alterar(livro);
+                JOptionPane.showMessageDialog(this, "Atualizado com sucesso!");
+                limparCampos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar!");
+            }
+        });
+
+        btnExcluir.addActionListener(e -> {
+            try {
+                livroDAO.excluir(txtId.getText());
+                JOptionPane.showMessageDialog(this, "Excluído com sucesso!");
+                limparCampos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao excluir!");
+            }
+        });
     }
 
     private void limparCampos() {
         txtId.setText("");
-        txtTitulo.setText("");
-        txtAutor.setText("");
+        txtNome.setText("");
+        txtAutorId.setText("");
     }
 }
