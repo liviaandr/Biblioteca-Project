@@ -41,7 +41,7 @@ public class LivroDAO implements IPersistencia<Livro> {
     }
 
     @Override
-    public Livro consultar(String id) {
+    public Livro consultar(int id) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -50,7 +50,7 @@ public class LivroDAO implements IPersistencia<Livro> {
             stmt = con.prepareStatement("SELECT livro_id, nome, autor_id, isbn, ano_publicacao, editora, genero " +
                             "FROM LIVRO WHERE livro_id = ?");
 
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
 
             rs = stmt.executeQuery();
 
@@ -64,7 +64,7 @@ public class LivroDAO implements IPersistencia<Livro> {
                 String genero = rs.getString("genero");
 
                 AutorDAO autorDAO = new AutorDAO();
-                Autor autor = autorDAO.consultar(String.valueOf(autorId));
+                Autor autor = autorDAO.consultar(Integer.valueOf(autorId));
 
                 Livro livro = new Livro();
 
@@ -90,7 +90,7 @@ public class LivroDAO implements IPersistencia<Livro> {
     }
 
     @Override
-    public void alterar(String id, Livro objeto) {
+    public void alterar(int id, Livro objeto) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
 
@@ -104,7 +104,7 @@ public class LivroDAO implements IPersistencia<Livro> {
             stmt.setInt(4, objeto.getAnoPublicacao());
             stmt.setString(5, objeto.getEditora());
             stmt.setString(6, objeto.getGenero());
-            stmt.setString(7, id);
+            stmt.setInt(7, id);
 
             stmt.executeUpdate();
 
@@ -119,14 +119,14 @@ public class LivroDAO implements IPersistencia<Livro> {
     }
 
     @Override
-    public void excluir(String id) {
+    public void excluir(int id) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
 
         try {
             stmt = con.prepareStatement("DELETE FROM LIVRO WHERE livro_id = ?");
 
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
 
             System.out.println("Livro " + id + " excluído com sucesso");

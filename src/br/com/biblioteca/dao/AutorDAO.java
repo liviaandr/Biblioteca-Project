@@ -37,7 +37,7 @@ public class AutorDAO implements IPersistencia<Autor> {
     }
 
     @Override
-    public Autor consultar(String id) {
+    public Autor consultar(int id) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -46,7 +46,7 @@ public class AutorDAO implements IPersistencia<Autor> {
             stmt = con.prepareStatement("SELECT id, nome, data_nascimento " +
                             "FROM AUTOR WHERE id = ?");
 
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
 
             rs = stmt.executeQuery();
 
@@ -71,7 +71,7 @@ public class AutorDAO implements IPersistencia<Autor> {
     }
 
     @Override
-    public void alterar(String id, Autor objeto) {
+    public void alterar(int id, Autor objeto) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
 
@@ -82,7 +82,7 @@ public class AutorDAO implements IPersistencia<Autor> {
 
             stmt.setString(1, objeto.getNome());
             stmt.setDate(2, Date.valueOf(objeto.getDataNascimento()));
-            stmt.setString(3, id);
+            stmt.setInt(3, id);
 
             stmt.executeUpdate();
 
@@ -97,14 +97,14 @@ public class AutorDAO implements IPersistencia<Autor> {
     }
 
     @Override
-    public void excluir(String id) {
+    public void excluir(int id) {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement stmt = null;
 
         try {
             stmt = con.prepareStatement("DELETE FROM AUTOR WHERE id = ?");
 
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
 
             System.out.println("Autor " + id + " excluído com sucesso");
