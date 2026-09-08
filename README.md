@@ -150,12 +150,12 @@ Desenvolver um único sistema em **Java Swing**, utilizando **Programação Orie
 
 ### Funcionalidades
 
-- CRUD completo
-- Cadastro
-- Consulta
-- Alteração
-- Exclusão
-- Integração com Banco
+- Cadastro, consulta, alteração e exclusão de livros.
+- Consulta por código, título ou autor.
+- JTable funcional.
+- Persistência em PostgreSQL via JDBC e DAO.
+- Versão SDI com múltiplos JFrame.
+- Versão MDI com JFrame + JDesktopPane + JInternalFrame.
 
 </td>
 
@@ -175,6 +175,83 @@ Desenvolver um único sistema em **Java Swing**, utilizando **Programação Orie
 
 </td>
 </tr>
+</table>
+
+---
+
+## 📖 Modelo do Livro
+
+<table>
+<tr>
+<td valign="top">
+
+### Dados
+
+- Código
+- Título
+- Autor
+- Editora
+- Ano de publicação
+- Categoria
+- Disponibilidade
+
+</td>
+
+<td valign="top">
+
+### Tipo
+
+- `int`
+- `String`
+- `String`
+- `String`
+- `int`
+- `String`
+- `boolean`
+
+</td>
+</tr>
+</table>
+
+---
+
+---
+
+## ⚙️ Configurações para rodar o projeto
+
+<table>
+<tr>
+<td valign="top">
+
+### Requisitos
+
+- Java 17 ou superior.
+- PostgreSQL.
+- Driver JDBC do PostgreSQL.
+
+</td>
+
+<td valign="top">
+
+### Configuração
+
+1. Execute `biblioteca.sql` no banco escolhido.
+2. Adicione o driver JDBC do PostgreSQL ao classpath do projeto.
+3. Edite `database.properties` com as credenciais locais. Não publique senha real.
+4. Execute `Principal.java` e escolha SDI ou MDI.
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+
+### Observação
+As versões SDI e MDI usam o mesmo domínio, DAO e banco. A diferença está apenas na forma de organizar as janelas.
+
+</td>
+</tr>
+
 </table>
 
 ---
