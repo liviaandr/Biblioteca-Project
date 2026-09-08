@@ -8,11 +8,8 @@ public class TelaPrincipalMDI extends JFrame {
 
     public TelaPrincipalMDI() {
         setTitle("Sistema de Biblioteca - MDI"); setSize(1000, 650);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        add(desktopPane, BorderLayout.CENTER);
-        add(new JLabel("Sistema de Biblioteca", SwingConstants.CENTER), BorderLayout.CENTER);
-        configurarMenus();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); setLocationRelativeTo(null);
+        add(desktopPane, BorderLayout.CENTER); configurarMenus();
     }
 
     private void configurarMenus() {
