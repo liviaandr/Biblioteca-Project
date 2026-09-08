@@ -205,7 +205,7 @@ Desenvolver um único sistema em **Java Swing**, utilizando **Programação Orie
 - `String`
 - `String`
 - `String`
-- `String`
+- `int`
 - `String`
 - `boolean`
 
