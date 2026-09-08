@@ -1,8 +1,5 @@
 package br.com.biblioteca.models;
 
-/**
- * 
- */
 public class Livro {
     private int codigo;
     private String titulo;
