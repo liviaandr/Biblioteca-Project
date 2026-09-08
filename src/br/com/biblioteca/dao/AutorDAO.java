@@ -3,119 +3,106 @@ package br.com.biblioteca.dao;
 import br.com.biblioteca.database.DatabaseConnection;
 import br.com.biblioteca.models.Autor;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutorDAO implements IPersistencia<Autor> {
-
     @Override
-    public void inserir(Autor objeto) {
-        Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement stmt = null;
-
-        try {
-            stmt = con.prepareStatement("INSERT INTO AUTOR (nome, data_nascimento) VALUES (?, ?)");
-
-            stmt.setString(1, objeto.getNome());
-            stmt.setDate(2, Date.valueOf(objeto.getDataNascimento()));
-
+    public void inserir(Autor autor) {
+        String sql = "INSERT INTO autor (nome) VALUES (?)";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, autor.getNome());
             stmt.executeUpdate();
-
-            System.out.println("Autor " + objeto.getNome() + " inserido com sucesso.");
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-            throw new RuntimeException("Erro ao tentar inserir informação no banco de dados.");
-
-        } finally {
-            DatabaseConnection.closeConnection(con, stmt);
-        }
-    }
-
-    @Override
-    public Autor consultar(int id) {
-        Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = con.prepareStatement("SELECT id, nome, data_nascimento " +
-                            "FROM AUTOR WHERE id = ?");
-
-            stmt.setInt(1, id);
-
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                Autor autor = new Autor();
-
-                autor.setId(rs.getInt("id"));
-                autor.setNome(rs.getString("nome"));
-                autor.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
-
-                return autor;
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) autor.setId(rs.getInt(1));
             }
-
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        } finally {
-            DatabaseConnection.closeConnection(con, stmt);
-        }
-
-        return null;
-    }
-
-    @Override
-    public void alterar(int id, Autor objeto) {
-        Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement stmt = null;
-
-        try {
-            stmt = con.prepareStatement("UPDATE AUTOR " +
-                            "SET nome = ?, data_nascimento = ? " +
-                            "WHERE id = ?");
-
-            stmt.setString(1, objeto.getNome());
-            stmt.setDate(2, Date.valueOf(objeto.getDataNascimento()));
-            stmt.setInt(3, id);
-
-            stmt.executeUpdate();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-            throw new RuntimeException("Erro ao alterar informação no banco de dados");
-
-        } finally {
-            DatabaseConnection.closeConnection(con, stmt);
+            throw new RuntimeException("Não foi possível cadastrar o autor.", ex);
         }
     }
 
+    public Autor buscarPorNome(String nome) {
+        String sql = "SELECT id, nome FROM autor WHERE LOWER(nome) = LOWER(?) LIMIT 1";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, nome);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return new Autor(rs.getInt("id"), rs.getString("nome"));
+            }
+            return null;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Não foi possível consultar o autor.", ex);
+        }
+    }
+
+    public Autor obterOuCriar(String nome) {
+        Autor autor = buscarPorNome(nome);
+        if (autor != null) return autor;
+        autor = new Autor(0, nome);
+        inserir(autor);
+        return autor;
+    }
+
+    public List<Autor> listar() {
+        List<Autor> autores = new ArrayList<>();
+        String sql = "SELECT id, nome FROM autor ORDER BY nome";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) autores.add(new Autor(rs.getInt("id"), rs.getString("nome")));
+            return autores;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Não foi possível listar os autores.", ex);
+        }
+    }
+
     @Override
-    public void excluir(int id) {
-        Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement stmt = null;
-
+    public Autor consultar(String id) {
         try {
-            stmt = con.prepareStatement("DELETE FROM AUTOR WHERE id = ?");
+            return buscarPorId(Integer.parseInt(id));
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
 
+    private Autor buscarPorId(int id) {
+        String sql = "SELECT id, nome FROM autor WHERE id = ?";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            stmt.executeUpdate();
-
-            System.out.println("Autor " + id + " excluído com sucesso");
-
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return new Autor(rs.getInt("id"), rs.getString("nome"));
+            }
+            return null;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            throw new RuntimeException("Não foi possível consultar o autor.", ex);
+        }
+    }
 
-            throw new RuntimeException("Erro ao excluir informação no banco de dados");
+    @Override
+    public void alterar(String id, Autor objeto) {
+        String sql = "UPDATE autor SET nome = ? WHERE id = ?";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, objeto.getNome());
+            stmt.setInt(2, Integer.parseInt(id));
+            stmt.executeUpdate();
+        } catch (SQLException | NumberFormatException ex) {
+            throw new RuntimeException("Não foi possível alterar o autor.", ex);
+        }
+    }
 
-        } finally {
-            DatabaseConnection.closeConnection(con, stmt);
+    @Override
+    public void excluir(String id) {
+        String sql = "DELETE FROM autor WHERE id = ?";
+        try (Connection con = DatabaseConnection.getDatabaseConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.executeUpdate();
+        } catch (SQLException | NumberFormatException ex) {
+            throw new RuntimeException("Não foi possível excluir o autor.", ex);
         }
     }
 }
