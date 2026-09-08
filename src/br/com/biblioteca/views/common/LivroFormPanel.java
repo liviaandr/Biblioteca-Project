@@ -11,7 +11,7 @@ public class LivroFormPanel extends JPanel {
     private final JTextField txtAutor = new JTextField();
     private final JTextField txtEditora = new JTextField();
     private final JTextField txtAno = new JTextField();
-    private final JComboBox<String> cbGenero = new JComboBox<>(new String[]{"Literatura", "Tecnologia", "Ciências", "História", "Filosofia", "Educação", "Outros"});
+    private final JComboBox<String> cbCategoria = new JComboBox<>(new String[]{"Literatura", "Tecnologia", "Ciências", "História", "Filosofia", "Educação", "Outros"});
     private final JComboBox<String> cbDisponibilidade = new JComboBox<>(new String[]{"Disponível", "Indisponível"});
 
     public LivroFormPanel() {
@@ -21,7 +21,7 @@ public class LivroFormPanel extends JPanel {
         add(new JLabel("Autor:")); add(txtAutor);
         add(new JLabel("Editora:")); add(txtEditora);
         add(new JLabel("Ano de publicação:")); add(txtAno);
-        add(new JLabel("Genero:")); add(cbGenero);
+        add(new JLabel("Categoria:")); add(cbCategoria);
         add(new JLabel("Disponibilidade:")); add(cbDisponibilidade);
     }
 
@@ -29,7 +29,7 @@ public class LivroFormPanel extends JPanel {
         String titulo = txtTitulo.getText().trim();
         String autorNome = txtAutor.getText().trim();
         String editora = txtEditora.getText().trim();
-        String genero = String.valueOf(cbGenero.getSelectedItem());
+        String categoria = String.valueOf(cbCategoria.getSelectedItem());
         if (titulo.isEmpty()) throw new IllegalArgumentException("Informe o título.");
         if (autorNome.isEmpty()) throw new IllegalArgumentException("Informe o autor.");
         if (editora.isEmpty()) throw new IllegalArgumentException("Informe a editora.");
@@ -38,7 +38,7 @@ public class LivroFormPanel extends JPanel {
         catch (NumberFormatException ex) { throw new IllegalArgumentException("O ano deve ser um número inteiro."); }
         int anoAtual = Year.now().getValue();
         if (ano < 1000 || ano > anoAtual) throw new IllegalArgumentException("Informe um ano entre 1000 e " + anoAtual + ".");
-        return new Livro(0, titulo, new Autor(0, autorNome), editora, ano, genero,
+        return new Livro(0, titulo, new Autor(0, autorNome), editora, ano, categoria,
                 "Disponível".equals(cbDisponibilidade.getSelectedItem()));
     }
 
@@ -47,12 +47,12 @@ public class LivroFormPanel extends JPanel {
         txtAutor.setText(livro.getAutor() == null ? "" : livro.getAutor().getNome());
         txtEditora.setText(livro.getEditora());
         txtAno.setText(String.valueOf(livro.getAnoPublicacao()));
-        cbGenero.setSelectedItem(livro.getGenero());
+        cbCategoria.setSelectedItem(livro.getCategoria());
         cbDisponibilidade.setSelectedItem(livro.isDisponivel() ? "Disponível" : "Indisponível");
     }
 
     public void limpar() {
         txtTitulo.setText(""); txtAutor.setText(""); txtEditora.setText(""); txtAno.setText("");
-        cbGenero.setSelectedIndex(0); cbDisponibilidade.setSelectedIndex(0); txtTitulo.requestFocus();
+        cbCategoria.setSelectedIndex(0); cbDisponibilidade.setSelectedIndex(0); txtTitulo.requestFocus();
     }
 }

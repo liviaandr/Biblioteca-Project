@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LivroTableModel extends AbstractTableModel {
-    private final String[] colunas = {"Código", "Título", "Autor", "Editora", "Ano", "Genero", "Disponibilidade"};
+    private final String[] colunas = {"Código", "Título", "Autor", "Editora", "Ano", "Categoria", "Disponibilidade"};
     private List<Livro> livros = new ArrayList<>();
 
     public void setLivros(List<Livro> livros) {
@@ -25,7 +25,7 @@ public class LivroTableModel extends AbstractTableModel {
             case 2 -> l.getAutor() == null ? "" : l.getAutor().getNome();
             case 3 -> l.getEditora();
             case 4 -> l.getAnoPublicacao();
-            case 5 -> l.getGenero();
+            case 5 -> l.getCategoria();
             case 6 -> l.isDisponivel() ? "Disponível" : "Indisponível";
             default -> "";
         };

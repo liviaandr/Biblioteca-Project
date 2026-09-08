@@ -9,20 +9,20 @@ public class Livro {
     private Autor autor;
     private String editora;
     private int anoPublicacao;
-    private String genero;
+    private String categoria;
     private boolean disponivel;
 
     public Livro() {
     }
 
     public Livro(int codigo, String titulo, Autor autor, String editora,
-                 int anoPublicacao, String genero, boolean disponivel) {
+                 int anoPublicacao, String categoria, boolean disponivel) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.autor = autor;
         this.editora = editora;
         this.anoPublicacao = anoPublicacao;
-        this.genero = genero;
+        this.categoria = categoria;
         this.disponivel = disponivel;
     }
 
@@ -36,8 +36,8 @@ public class Livro {
     public void setEditora(String editora) { this.editora = editora; }
     public int getAnoPublicacao() { return anoPublicacao; }
     public void setAnoPublicacao(int anoPublicacao) { this.anoPublicacao = anoPublicacao; }
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
     public boolean isDisponivel() { return disponivel; }
     public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
 }

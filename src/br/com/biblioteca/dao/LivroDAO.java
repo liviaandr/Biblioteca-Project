@@ -11,7 +11,7 @@ import java.util.List;
 public class LivroDAO implements IPersistencia<Livro> {
     private static final String BASE_SELECT =
             "SELECT l.livro_id, l.titulo, l.autor_id, a.nome AS autor, " +
-            "l.editora, l.ano_publicacao, l.genero, l.disponivel " +
+            "l.editora, l.ano_publicacao, l.categoria, l.disponivel " +
             "FROM livro l INNER JOIN autor a ON a.id = l.autor_id ";
 
     @Override
@@ -19,7 +19,7 @@ public class LivroDAO implements IPersistencia<Livro> {
         validarLivro(livro);
         Autor autor = new AutorDAO().obterOuCriar(livro.getAutor().getNome());
         livro.setAutor(autor);
-        String sql = "INSERT INTO livro (titulo, autor_id, editora, ano_publicacao, genero, disponivel) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO livro (titulo, autor_id, editora, ano_publicacao, categoria, disponivel) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DatabaseConnection.getDatabaseConnection();
              PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preencherStatement(stmt, livro);
@@ -80,7 +80,7 @@ public class LivroDAO implements IPersistencia<Livro> {
         validarLivro(livro);
         Autor autor = new AutorDAO().obterOuCriar(livro.getAutor().getNome());
         livro.setAutor(autor);
-        String sql = "UPDATE livro SET titulo = ?, autor_id = ?, editora = ?, ano_publicacao = ?, genero = ?, disponivel = ? WHERE livro_id = ?";
+        String sql = "UPDATE livro SET titulo = ?, autor_id = ?, editora = ?, ano_publicacao = ?, categoria = ?, disponivel = ? WHERE livro_id = ?";
         try (Connection con = DatabaseConnection.getDatabaseConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             preencherStatement(stmt, livro);
@@ -108,7 +108,7 @@ public class LivroDAO implements IPersistencia<Livro> {
         stmt.setInt(2, livro.getAutor().getId());
         stmt.setString(3, livro.getEditora());
         stmt.setInt(4, livro.getAnoPublicacao());
-        stmt.setString(5, livro.getGenero());
+        stmt.setString(5, livro.getCategoria());
         stmt.setBoolean(6, livro.isDisponivel());
     }
 
@@ -116,7 +116,7 @@ public class LivroDAO implements IPersistencia<Livro> {
         Autor autor = new Autor(rs.getInt("autor_id"), rs.getString("autor"));
         return new Livro(rs.getInt("livro_id"), rs.getString("titulo"), autor,
                 rs.getString("editora"), rs.getInt("ano_publicacao"),
-                rs.getString("genero"), rs.getBoolean("disponivel"));
+                rs.getString("categoria"), rs.getBoolean("disponivel"));
     }
 
     private void validarLivro(Livro livro) {
@@ -126,6 +126,6 @@ public class LivroDAO implements IPersistencia<Livro> {
             throw new IllegalArgumentException("O autor é obrigatório.");
         if (livro.getAnoPublicacao() <= 0) throw new IllegalArgumentException("O ano de publicação deve ser válido.");
         if (livro.getEditora() == null || livro.getEditora().isBlank()) throw new IllegalArgumentException("A editora é obrigatória.");
-        if (livro.getGenero() == null || livro.getGenero().isBlank()) throw new IllegalArgumentException("A genero é obrigatória.");
+        if (livro.getCategoria() == null || livro.getCategoria().isBlank()) throw new IllegalArgumentException("A categoria é obrigatória.");
     }
 }

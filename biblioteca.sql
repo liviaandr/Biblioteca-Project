@@ -11,7 +11,7 @@ CREATE TABLE livro (
     isbn VARCHAR(20),
     ano_publicacao INTEGER,
     editora VARCHAR(100),
-    genero VARCHAR(50),
+    categoria VARCHAR(50),
 
     CONSTRAINT fk_livro_autor
         FOREIGN KEY (autor_id)
@@ -31,7 +31,7 @@ SELECT
     l.isbn,
     l.ano_publicacao,
     l.editora,
-    l.genero
+    l.categoria
 FROM livro l
 INNER JOIN autor a ON a.id = l.autor_id;
 
